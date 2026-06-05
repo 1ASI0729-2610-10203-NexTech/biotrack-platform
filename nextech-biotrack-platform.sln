@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nextech.biotrack.platform", "nextech.biotrack.platform\nextech.biotrack.platform.csproj", "{7D0086E7-E269-4F67-9EA1-B5BD1DDB79F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D0086E7-E269-4F67-9EA1-B5BD1DDB79F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D0086E7-E269-4F67-9EA1-B5BD1DDB79F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D0086E7-E269-4F67-9EA1-B5BD1DDB79F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D0086E7-E269-4F67-9EA1-B5BD1DDB79F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
