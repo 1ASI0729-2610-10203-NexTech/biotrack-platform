@@ -1,0 +1,6 @@
+@nextech.biotrack.platform_HostAddress = http://localhost:5279
+
+GET {{nextech.biotrack.platform_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
