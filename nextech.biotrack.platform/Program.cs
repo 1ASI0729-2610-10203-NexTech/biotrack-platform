@@ -1,23 +1,83 @@
+using Cortex.Mediator.Commands;
+using Cortex.Mediator.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using nextech.biotrack.platform.Shared.Domain.Repositories;
+using nextech.biotrack.platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
+using nextech.biotrack.platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
+using nextech.biotrack.platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using nextech.biotrack.platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using nextech.biotrack.platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddControllers(options => options.Conventions.Add(new KebabCaseRouteNamingConvention()));
+builder.Services.AddProblemDetails();
 
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Add CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllPolicy",
+        policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
+
+// Add Database Connection
+builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    if (string.IsNullOrWhiteSpace(connectionString))
+        throw new InvalidOperationException("Database connection string is not set in the configuration.");
+
+    options.UseMySQL(connectionString)
+        .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
+        .EnableDetailedErrors();
+
+    if (builder.Environment.IsDevelopment())
+        options.EnableSensitiveDataLogging();
+});
+
+// Add Swagger/OpenAPI
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Nextech BioTrack Platform",
+        Version = "v1",
+        Description = "BioTrack Platform API"
+    });
+    options.EnableAnnotations();
+});
+
+// Shared Bounded Context
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Mediator Configuration
+builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
+builder.Services.AddCortexMediator([typeof(Program)]);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Apply pending migrations on startup
+using (var scope = app.Services.CreateScope())
 {
-    app.MapOpenApi();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
 }
 
+// Configure the HTTP request pipeline.
+app.UseGlobalExceptionHandler();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseCors("AllowAllPolicy");
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
