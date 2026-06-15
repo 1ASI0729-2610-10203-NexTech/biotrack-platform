@@ -1,6 +1,18 @@
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using nextech.biotrack.platform.Iam.Application.Acl;
+using nextech.biotrack.platform.Iam.Application.CommandServices;
+using nextech.biotrack.platform.Iam.Application.Internal.CommandServices;
+using nextech.biotrack.platform.Iam.Application.Internal.OutboundServices;
+using nextech.biotrack.platform.Iam.Application.Internal.QueryServices;
+using nextech.biotrack.platform.Iam.Application.QueryServices;
+using nextech.biotrack.platform.Iam.Domain.Repositories;
+using nextech.biotrack.platform.Iam.Infrastructure.Hashing.BCrypt.Services;
+using nextech.biotrack.platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using nextech.biotrack.platform.Iam.Infrastructure.Tokens.Jwt.Configuration;
+using nextech.biotrack.platform.Iam.Infrastructure.Tokens.Jwt.Services;
+using nextech.biotrack.platform.Iam.Interfaces.Acl;
 using nextech.biotrack.platform.Shared.Domain.Repositories;
 using nextech.biotrack.platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using nextech.biotrack.platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
@@ -47,11 +59,29 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Description = "BioTrack Platform API"
     });
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Please enter JWT token",
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
     options.EnableAnnotations();
 });
 
 // Shared Bounded Context
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// IAM Bounded Context
+builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserCommandService, UserCommandService>();
+builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
