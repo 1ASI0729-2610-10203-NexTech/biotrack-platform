@@ -8,4 +8,5 @@ public interface IUserCommandService
 {
     Task<Result> Handle(RegisterUserCommand command, CancellationToken cancellationToken);
     Task<Result<(User user, string token)>> Handle(LoginCommand command, CancellationToken cancellationToken);
+    Task<Result> Handle(VerifyEmailCommand command, CancellationToken cancellationToken);
 }
