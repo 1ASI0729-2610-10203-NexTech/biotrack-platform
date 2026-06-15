@@ -13,6 +13,7 @@ namespace nextech.biotrack.platform.Iam.Application.Internal.CommandServices;
 public class UserCommandService(
     IUserRepository userRepository,
     IHashingService hashingService,
+    ITokenService tokenService,
     IUnitOfWork unitOfWork)
     : IUserCommandService
 {
@@ -43,5 +44,17 @@ public class UserCommandService(
         {
             return Result.Failure(IamErrors.InternalServerError, "An unexpected error occurred.");
         }
+    }
+
+    public async Task<Result<(User user, string token)>> Handle(LoginCommand command, CancellationToken cancellationToken)
+    {
+        var user = await userRepository.FindByEmailAsync(command.Email, cancellationToken);
+
+        if (user == null || !hashingService.VerifyPassword(command.Password, user.PasswordHash))
+            return Result<(User user, string token)>.Failure(
+                IamErrors.InvalidCredentials, "Invalid email or password.");
+
+        var token = tokenService.GenerateToken(user);
+        return Result<(User user, string token)>.Success((user, token));
     }
 }
