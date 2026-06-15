@@ -1,22 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
-using nextech.biotrack.platform.Iam.Domain.Model.Errors;
+using nextech.biotrack.platform.Iam.Domain.Model;
 using nextech.biotrack.platform.Shared.Application.Internal.Model;
 
 namespace nextech.biotrack.platform.Iam.Interfaces.Rest.Transform;
 
 public static class IamActionResultAssembler
 {
-    private static int ToStatusCode(IamErrors error)
+    private static int ToStatusCode(IamError error)
     {
         return error switch
         {
-            IamErrors.EmailAlreadyTaken => StatusCodes.Status409Conflict,
-            IamErrors.InvalidCredentials => StatusCodes.Status400BadRequest,
-            IamErrors.UserNotFound => StatusCodes.Status404NotFound,
-            IamErrors.InvalidVerificationToken => StatusCodes.Status400BadRequest,
-            IamErrors.EmailAlreadyVerified => StatusCodes.Status409Conflict,
-            IamErrors.DatabaseError => StatusCodes.Status500InternalServerError,
-            IamErrors.InternalServerError => StatusCodes.Status500InternalServerError,
+            IamError.EmailAlreadyTaken => StatusCodes.Status409Conflict,
+            IamError.InvalidCredentials => StatusCodes.Status400BadRequest,
+            IamError.UserNotFound => StatusCodes.Status404NotFound,
+            IamError.InvalidVerificationToken => StatusCodes.Status400BadRequest,
+            IamError.EmailAlreadyVerified => StatusCodes.Status409Conflict,
+            IamError.DatabaseError => StatusCodes.Status500InternalServerError,
+            IamError.InternalServerError => StatusCodes.Status500InternalServerError,
             _ => StatusCodes.Status400BadRequest
         };
     }
@@ -28,7 +28,7 @@ public static class IamActionResultAssembler
     {
         if (result.IsSuccess) return successAction();
 
-        var statusCode = ToStatusCode((IamErrors)result.Error!);
+        var statusCode = ToStatusCode((IamError)result.Error!);
         return controller.Problem(result.Message, statusCode: statusCode);
     }
 
@@ -39,7 +39,7 @@ public static class IamActionResultAssembler
     {
         if (result.IsSuccess) return successAction(result.Value!);
 
-        var statusCode = ToStatusCode((IamErrors)result.Error!);
+        var statusCode = ToStatusCode((IamError)result.Error!);
         return controller.Problem(result.Message, statusCode: statusCode);
     }
 }
