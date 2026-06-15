@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using nextech.biotrack.platform.Iam.Application.CommandServices;
+using nextech.biotrack.platform.Iam.Domain.Model.Commands;
 using nextech.biotrack.platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using nextech.biotrack.platform.Iam.Interfaces.Rest.Resources;
 using nextech.biotrack.platform.Iam.Interfaces.Rest.Transform;
@@ -31,5 +32,22 @@ public class AuthController(IUserCommandService userCommandService) : Controller
             this, result,
             userAndToken => Ok(AuthenticatedUserResourceFromEntityAssembler
                 .ToResourceFromEntity(userAndToken.user, userAndToken.token)));
+    }
+
+    /// <summary>Verify email address with token (TS03)</summary>
+    [HttpGet("verify-email")]
+    [AllowAnonymous]
+    [SwaggerOperation(Summary = "Verify email", OperationId = "VerifyEmail")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Email verified successfully")]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid or already used token")]
+    public async Task<IActionResult> VerifyEmail(
+        [FromQuery] string token,
+        CancellationToken cancellationToken)
+    {
+        var command = new VerifyEmailCommand(token);
+        var result = await userCommandService.Handle(command, cancellationToken);
+        return IamActionResultAssembler.ToActionResult(
+            this, result,
+            () => Ok(new { message = "Email verified successfully." }));
     }
 }
