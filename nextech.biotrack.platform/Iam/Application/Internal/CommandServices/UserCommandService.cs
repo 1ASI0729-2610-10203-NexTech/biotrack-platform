@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using nextech.biotrack.platform.Iam.Application.CommandServices;
 using nextech.biotrack.platform.Iam.Application.Internal.OutboundServices;
+using nextech.biotrack.platform.Iam.Domain.Model;
 using nextech.biotrack.platform.Iam.Domain.Model.Aggregates;
 using nextech.biotrack.platform.Iam.Domain.Model.Commands;
-using nextech.biotrack.platform.Iam.Domain.Model.Errors;
 using nextech.biotrack.platform.Iam.Domain.Repositories;
 using nextech.biotrack.platform.Shared.Application.Internal.Model;
 using nextech.biotrack.platform.Shared.Domain.Repositories;
@@ -20,7 +20,7 @@ public class UserCommandService(
     public async Task<Result> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         if (await userRepository.ExistsByEmailAsync(command.Email, cancellationToken))
-            return Result.Failure(IamErrors.EmailAlreadyTaken,
+            return Result.Failure(IamError.EmailAlreadyTaken,
                 $"The email '{command.Email}' is already registered.");
 
         var hashedPassword = hashingService.HashPassword(command.Password);
@@ -34,15 +34,15 @@ public class UserCommandService(
         }
         catch (OperationCanceledException)
         {
-            return Result.Failure(IamErrors.OperationCancelled, "The operation was cancelled.");
+            return Result.Failure(IamError.OperationCancelled, "The operation was cancelled.");
         }
         catch (DbUpdateException)
         {
-            return Result.Failure(IamErrors.DatabaseError, "A database error occurred while registering the user.");
+            return Result.Failure(IamError.DatabaseError, "A database error occurred while registering the user.");
         }
         catch (Exception)
         {
-            return Result.Failure(IamErrors.InternalServerError, "An unexpected error occurred.");
+            return Result.Failure(IamError.InternalServerError, "An unexpected error occurred.");
         }
     }
 
@@ -52,7 +52,7 @@ public class UserCommandService(
 
         if (user == null || !hashingService.VerifyPassword(command.Password, user.PasswordHash))
             return Result<(User user, string token)>.Failure(
-                IamErrors.InvalidCredentials, "Invalid email or password.");
+                IamError.InvalidCredentials, "Invalid email or password.");
 
         var token = tokenService.GenerateToken(user);
         return Result<(User user, string token)>.Success((user, token));
@@ -63,11 +63,11 @@ public class UserCommandService(
         var user = await userRepository.FindByVerificationTokenAsync(command.Token, cancellationToken);
 
         if (user == null)
-            return Result.Failure(IamErrors.InvalidVerificationToken,
+            return Result.Failure(IamError.InvalidVerificationToken,
                 "The verification token is invalid or has already been used.");
 
         if (user.EmailVerified)
-            return Result.Failure(IamErrors.EmailAlreadyVerified,
+            return Result.Failure(IamError.EmailAlreadyVerified,
                 "The email address has already been verified.");
 
         user.VerifyEmail();
@@ -80,7 +80,7 @@ public class UserCommandService(
         }
         catch (DbUpdateException)
         {
-            return Result.Failure(IamErrors.DatabaseError, "A database error occurred while verifying the email.");
+            return Result.Failure(IamError.DatabaseError, "A database error occurred while verifying the email.");
         }
     }
 }
