@@ -57,4 +57,30 @@ public class UserCommandService(
         var token = tokenService.GenerateToken(user);
         return Result<(User user, string token)>.Success((user, token));
     }
+
+    public async Task<Result> Handle(VerifyEmailCommand command, CancellationToken cancellationToken)
+    {
+        var user = await userRepository.FindByVerificationTokenAsync(command.Token, cancellationToken);
+
+        if (user == null)
+            return Result.Failure(IamErrors.InvalidVerificationToken,
+                "The verification token is invalid or has already been used.");
+
+        if (user.EmailVerified)
+            return Result.Failure(IamErrors.EmailAlreadyVerified,
+                "The email address has already been verified.");
+
+        user.VerifyEmail();
+        userRepository.Update(user);
+
+        try
+        {
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result.Success();
+        }
+        catch (DbUpdateException)
+        {
+            return Result.Failure(IamErrors.DatabaseError, "A database error occurred while verifying the email.");
+        }
+    }
 }
