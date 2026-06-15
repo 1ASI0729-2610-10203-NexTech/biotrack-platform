@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using nextech.biotrack.platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using nextech.biotrack.platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using nextech.biotrack.platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 
@@ -16,5 +17,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(builder);
         builder.UseSnakeCaseNamingConvention();
+        builder.ApplyIamConfiguration();
     }
 }
