@@ -1,0 +1,47 @@
+using Microsoft.EntityFrameworkCore;
+using nextech.biotrack.platform.Iam.Application.CommandServices;
+using nextech.biotrack.platform.Iam.Application.Internal.OutboundServices;
+using nextech.biotrack.platform.Iam.Domain.Model.Aggregates;
+using nextech.biotrack.platform.Iam.Domain.Model.Commands;
+using nextech.biotrack.platform.Iam.Domain.Model.Errors;
+using nextech.biotrack.platform.Iam.Domain.Repositories;
+using nextech.biotrack.platform.Shared.Application.Internal.Model;
+using nextech.biotrack.platform.Shared.Domain.Repositories;
+
+namespace nextech.biotrack.platform.Iam.Application.Internal.CommandServices;
+
+public class UserCommandService(
+    IUserRepository userRepository,
+    IHashingService hashingService,
+    IUnitOfWork unitOfWork)
+    : IUserCommandService
+{
+    public async Task<Result> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
+    {
+        if (await userRepository.ExistsByEmailAsync(command.Email, cancellationToken))
+            return Result.Failure(IamErrors.EmailAlreadyTaken,
+                $"The email '{command.Email}' is already registered.");
+
+        var hashedPassword = hashingService.HashPassword(command.Password);
+        var user = new User(command.FirstName, command.LastName, command.Email, hashedPassword, command.Role);
+
+        try
+        {
+            await userRepository.AddAsync(user, cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result.Success();
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Failure(IamErrors.OperationCancelled, "The operation was cancelled.");
+        }
+        catch (DbUpdateException)
+        {
+            return Result.Failure(IamErrors.DatabaseError, "A database error occurred while registering the user.");
+        }
+        catch (Exception)
+        {
+            return Result.Failure(IamErrors.InternalServerError, "An unexpected error occurred.");
+        }
+    }
+}
