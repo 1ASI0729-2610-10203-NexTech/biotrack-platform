@@ -51,4 +51,43 @@ public class CompanyCommandService(
                 "An unexpected error occurred.");
         }
     }
+
+    public async Task<Result> Handle(UploadCompanyCollaboratorsCommand command, CancellationToken cancellationToken)
+    {
+        var company = await companyRepository.FindByIdWithCollaboratorsAsync(command.CompanyId, cancellationToken);
+
+        if (company == null)
+            return Result.Failure(CorporateManagementError.CompanyNotFound,
+                $"Company with ID {command.CompanyId} was not found.");
+
+        if (company.OwnerId != command.RequestingUserId)
+            return Result.Failure(CorporateManagementError.AccessDenied,
+                "You do not have access to this company.");
+
+        var collaboratorList = command.Collaborators.ToList();
+
+        if (collaboratorList.Any(c =>
+                string.IsNullOrWhiteSpace(c.FirstName) ||
+                string.IsNullOrWhiteSpace(c.LastName) ||
+                string.IsNullOrWhiteSpace(c.Email) ||
+                string.IsNullOrWhiteSpace(c.DocumentNumber)))
+            return Result.Failure(CorporateManagementError.InvalidCollaboratorData,
+                "One or more collaborators have missing required fields.");
+
+        company.ReplaceCollaborators(
+            collaboratorList.Select(c => (c.FirstName, c.LastName, c.Email, c.DocumentNumber)));
+
+        companyRepository.Update(company);
+
+        try
+        {
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result.Success();
+        }
+        catch (DbUpdateException)
+        {
+            return Result.Failure(CorporateManagementError.DatabaseError,
+                "A database error occurred while uploading collaborators.");
+        }
+    }
 }

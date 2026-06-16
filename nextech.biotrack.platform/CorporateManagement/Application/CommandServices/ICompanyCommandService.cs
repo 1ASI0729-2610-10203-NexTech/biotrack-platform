@@ -7,4 +7,5 @@ namespace nextech.biotrack.platform.CorporateManagement.Application.CommandServi
 public interface ICompanyCommandService
 {
     Task<Result<Company>> Handle(RegisterCompanyCommand command, CancellationToken cancellationToken);
+    Task<Result> Handle(UploadCompanyCollaboratorsCommand command, CancellationToken cancellationToken);
 }
