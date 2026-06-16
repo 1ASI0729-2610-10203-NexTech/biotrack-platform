@@ -1,6 +1,12 @@
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using nextech.biotrack.platform.PatientProfile.Application.CommandServices;
+using nextech.biotrack.platform.PatientProfile.Application.Internal.CommandServices;
+using nextech.biotrack.platform.PatientProfile.Application.Internal.QueryServices;
+using nextech.biotrack.platform.PatientProfile.Application.QueryServices;
+using nextech.biotrack.platform.PatientProfile.Domain.Repositories;
+using nextech.biotrack.platform.PatientProfile.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using nextech.biotrack.platform.Iam.Application.Acl;
 using nextech.biotrack.platform.Iam.Application.CommandServices;
 using nextech.biotrack.platform.Iam.Application.Internal.CommandServices;
@@ -73,6 +79,11 @@ builder.Services.AddSwaggerGen(options =>
 
 // Shared Bounded Context
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Patient Profile Bounded Context
+builder.Services.AddScoped<IPatientProfileRepository, PatientProfileRepository>();
+builder.Services.AddScoped<IPatientProfileCommandService, PatientProfileCommandService>();
+builder.Services.AddScoped<IPatientProfileQueryService, PatientProfileQueryService>();
 
 // IAM Bounded Context
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
