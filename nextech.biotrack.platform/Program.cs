@@ -1,6 +1,16 @@
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using nextech.biotrack.platform.NutritionalPlanning.Application.CommandServices;
+using nextech.biotrack.platform.NutritionalPlanning.Application.Internal.CommandServices;
+using nextech.biotrack.platform.NutritionalPlanning.Application.Internal.OutboundServices;
+using nextech.biotrack.platform.NutritionalPlanning.Application.Internal.QueryServices;
+using nextech.biotrack.platform.NutritionalPlanning.Application.QueryServices;
+using nextech.biotrack.platform.NutritionalPlanning.Domain.Repositories;
+using nextech.biotrack.platform.NutritionalPlanning.Domain.Services;
+using nextech.biotrack.platform.NutritionalPlanning.Infrastructure.OutboundServices;
+using nextech.biotrack.platform.NutritionalPlanning.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using nextech.biotrack.platform.NutritionalPlanning.Infrastructure.Services;
 using nextech.biotrack.platform.Iam.Application.Acl;
 using nextech.biotrack.platform.Iam.Application.CommandServices;
 using nextech.biotrack.platform.Iam.Application.Internal.CommandServices;
@@ -73,6 +83,17 @@ builder.Services.AddSwaggerGen(options =>
 
 // Shared Bounded Context
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Nutritional Planning Bounded Context
+builder.Services.AddScoped<IInitialEvaluationRepository, InitialEvaluationRepository>();
+builder.Services.AddScoped<INutritionalPlanRepository, NutritionalPlanRepository>();
+builder.Services.AddScoped<IControlAppointmentRepository, ControlAppointmentRepository>();
+builder.Services.AddScoped<IInitialEvaluationCommandService, InitialEvaluationCommandService>();
+builder.Services.AddScoped<INutritionalPlanCommandService, NutritionalPlanCommandService>();
+builder.Services.AddScoped<IControlAppointmentCommandService, ControlAppointmentCommandService>();
+builder.Services.AddScoped<INutritionalPlanQueryService, NutritionalPlanQueryService>();
+builder.Services.AddScoped<IEmailAdapter, EmailAdapter>();
+builder.Services.AddScoped<INutritionistAssignmentService, NutritionistAssignmentService>();
 
 // IAM Bounded Context
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
