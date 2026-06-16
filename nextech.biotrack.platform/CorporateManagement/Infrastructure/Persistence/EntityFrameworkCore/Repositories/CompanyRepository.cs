@@ -11,4 +11,9 @@ public class CompanyRepository(AppDbContext context) : BaseRepository<Company>(c
     public async Task<bool> ExistsByRucAsync(string ruc, CancellationToken cancellationToken) =>
         await Context.Set<Company>()
             .AnyAsync(c => c.Ruc == ruc, cancellationToken);
+
+    public async Task<Company?> FindByIdWithCollaboratorsAsync(int companyId, CancellationToken cancellationToken) =>
+        await Context.Set<Company>()
+            .Include(c => c.Collaborators)
+            .FirstOrDefaultAsync(c => c.Id == companyId, cancellationToken);
 }
