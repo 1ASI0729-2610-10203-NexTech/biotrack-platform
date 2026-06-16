@@ -1,6 +1,10 @@
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using nextech.biotrack.platform.CorporateManagement.Application.CommandServices;
+using nextech.biotrack.platform.CorporateManagement.Application.Internal.CommandServices;
+using nextech.biotrack.platform.CorporateManagement.Domain.Repositories;
+using nextech.biotrack.platform.CorporateManagement.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using nextech.biotrack.platform.Iam.Application.Acl;
 using nextech.biotrack.platform.Iam.Application.CommandServices;
 using nextech.biotrack.platform.Iam.Application.Internal.CommandServices;
@@ -73,6 +77,10 @@ builder.Services.AddSwaggerGen(options =>
 
 // Shared Bounded Context
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Corporate Management Bounded Context
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ICompanyCommandService, CompanyCommandService>();
 
 // IAM Bounded Context
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
