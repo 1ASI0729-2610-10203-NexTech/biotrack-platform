@@ -1,3 +1,5 @@
+using HealthProfile = nextech.biotrack.platform.PatientProfile.Domain.Model.Aggregates.PatientProfile;
+
 namespace nextech.biotrack.platform.PatientProfile.Domain.Model.Entities;
 
 public partial class FoodRestriction
@@ -18,5 +20,5 @@ public partial class FoodRestriction
     public string Description { get; private set; }
     public string Severity { get; private set; }
 
-    public Aggregates.PatientProfile PatientProfile { get; private set; } = null!;
+    public HealthProfile PatientProfile { get; private set; } = null!;
 }

@@ -1,11 +1,11 @@
-using nextech.biotrack.platform.PatientProfile.Domain.Model.Aggregates;
 using nextech.biotrack.platform.Shared.Domain.Repositories;
+using HealthProfile = nextech.biotrack.platform.PatientProfile.Domain.Model.Aggregates.PatientProfile;
 
 namespace nextech.biotrack.platform.PatientProfile.Domain.Repositories;
 
-public interface IPatientProfileRepository : IBaseRepository<PatientProfile>
+public interface IPatientProfileRepository : IBaseRepository<HealthProfile>
 {
-    Task<PatientProfile?> FindByPatientUserIdAsync(int patientUserId, CancellationToken cancellationToken);
-    Task<PatientProfile?> FindByPatientUserIdWithRestrictionsAsync(int patientUserId, CancellationToken cancellationToken);
+    Task<HealthProfile?> FindByPatientUserIdAsync(int patientUserId, CancellationToken cancellationToken);
+    Task<HealthProfile?> FindByPatientUserIdWithRestrictionsAsync(int patientUserId, CancellationToken cancellationToken);
     Task<bool> ExistsByPatientUserIdAsync(int patientUserId, CancellationToken cancellationToken);
 }
