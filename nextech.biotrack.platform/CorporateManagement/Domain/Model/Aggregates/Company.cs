@@ -30,4 +30,12 @@ public partial class Company
     public string Status { get; private set; }
 
     public ICollection<Collaborator> Collaborators { get; private set; } = new List<Collaborator>();
+
+    public void ReplaceCollaborators(
+        IEnumerable<(string firstName, string lastName, string email, string documentNumber)> collaboratorData)
+    {
+        Collaborators.Clear();
+        foreach (var (firstName, lastName, email, documentNumber) in collaboratorData)
+            Collaborators.Add(new Collaborator(Id, firstName, lastName, email, documentNumber));
+    }
 }
