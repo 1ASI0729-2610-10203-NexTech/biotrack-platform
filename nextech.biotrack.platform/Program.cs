@@ -13,6 +13,14 @@ using nextech.biotrack.platform.Iam.Infrastructure.Persistence.EntityFrameworkCo
 using nextech.biotrack.platform.Iam.Infrastructure.Tokens.Jwt.Configuration;
 using nextech.biotrack.platform.Iam.Infrastructure.Tokens.Jwt.Services;
 using nextech.biotrack.platform.Iam.Interfaces.Acl;
+using nextech.biotrack.platform.ProgressTracking.Application.CommandServices;
+using nextech.biotrack.platform.ProgressTracking.Application.Internal.CommandServices;
+using nextech.biotrack.platform.ProgressTracking.Application.Internal.OutboundServices;
+using nextech.biotrack.platform.ProgressTracking.Application.Internal.QueryServices;
+using nextech.biotrack.platform.ProgressTracking.Application.QueryServices;
+using nextech.biotrack.platform.ProgressTracking.Domain.Repositories;
+using nextech.biotrack.platform.ProgressTracking.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using nextech.biotrack.platform.ProgressTracking.Infrastructure.Services;
 using nextech.biotrack.platform.Shared.Domain.Repositories;
 using nextech.biotrack.platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using nextech.biotrack.platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
@@ -82,6 +90,22 @@ builder.Services.AddScoped<IUserQueryService, UserQueryService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
+
+// ProgressTracking Bounded Context
+builder.Services.AddScoped<IConsumptionRecordRepository, ConsumptionRecordRepository>();
+builder.Services.AddScoped<IActivityRecordRepository, ActivityRecordRepository>();
+builder.Services.AddScoped<IWeightRecordRepository, WeightRecordRepository>();
+builder.Services.AddScoped<IWeeklyAdherenceRepository, WeeklyAdherenceRepository>();
+builder.Services.AddScoped<IEvolutionReportRepository, EvolutionReportRepository>();
+builder.Services.AddScoped<IConsumptionRecordCommandService, ConsumptionRecordCommandService>();
+builder.Services.AddScoped<IActivityRecordCommandService, ActivityRecordCommandService>();
+builder.Services.AddScoped<IWeightRecordCommandService, WeightRecordCommandService>();
+builder.Services.AddScoped<IAdherenceCommandService, AdherenceCommandService>();
+builder.Services.AddScoped<IEvolutionReportCommandService, EvolutionReportCommandService>();
+builder.Services.AddScoped<IProgressChartQueryService, ProgressChartQueryService>();
+builder.Services.AddScoped<IAdherenceCalculatorService, AdherenceCalculatorService>();
+builder.Services.AddScoped<IPdfServiceAdapter, PdfServiceAdapter>();
+builder.Services.AddScoped<INutritionalPlanAdapter, NutritionalPlanAdapter>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));

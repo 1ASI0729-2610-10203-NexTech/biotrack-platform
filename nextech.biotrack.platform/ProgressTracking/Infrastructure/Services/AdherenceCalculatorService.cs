@@ -19,7 +19,7 @@ public class AdherenceCalculatorService(
         var expectedDailyCalories = await nutritionalPlanAdapter.GetExpectedDailyCaloriesAsync(planId, cancellationToken);
 
         if (!expectedDailyCalories.HasValue || expectedDailyCalories.Value <= 0)
-            return Math.Min(100m, Math.Round(consumptions.Average(c => c.Calories) / 2000m * 100m, 2));
+            return Math.Min(100m, Math.Round((decimal)consumptions.Average(c => c.Calories) / 2000m * 100m, 2));
 
         var actualTotal = consumptions.Sum(c => c.Calories);
         var expectedTotal = expectedDailyCalories.Value * 7;
