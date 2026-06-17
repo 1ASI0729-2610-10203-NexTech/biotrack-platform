@@ -77,6 +77,9 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "bearer"
     });
     options.EnableAnnotations();
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath)) options.IncludeXmlComments(xmlPath);
 });
 
 // Shared Bounded Context
