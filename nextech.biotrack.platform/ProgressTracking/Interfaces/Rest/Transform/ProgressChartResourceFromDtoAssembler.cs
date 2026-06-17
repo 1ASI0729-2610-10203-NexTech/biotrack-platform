@@ -1,11 +1,11 @@
-using nextech.biotrack.platform.ProgressTracking.Application.Dtos;
+using nextech.biotrack.platform.ProgressTracking.Domain.Model.ValueObjects;
 using nextech.biotrack.platform.ProgressTracking.Interfaces.Rest.Resources;
 
 namespace nextech.biotrack.platform.ProgressTracking.Interfaces.Rest.Transform;
 
 public static class ProgressChartResourceFromDtoAssembler
 {
-    public static ProgressChartResource ToResourceFromDto(ProgressChartDto dto)
+    public static ProgressChartResource ToResourceFromDto(ProgressChartResult dto)
     {
         var weightHistory = dto.WeightHistory.Select(w => new WeightDataPointResource(w.DayLabel, w.WeightKg));
         var adherenceHistory = dto.AdherenceHistory.Select(a => new AdherenceDataPointResource(a.WeekStart, a.AdherencePct));

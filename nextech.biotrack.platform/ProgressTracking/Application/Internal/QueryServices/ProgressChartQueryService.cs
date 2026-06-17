@@ -1,4 +1,4 @@
-using nextech.biotrack.platform.ProgressTracking.Application.Dtos;
+using nextech.biotrack.platform.ProgressTracking.Domain.Model.ValueObjects;
 using nextech.biotrack.platform.ProgressTracking.Application.QueryServices;
 using nextech.biotrack.platform.ProgressTracking.Domain.Model.Queries;
 using nextech.biotrack.platform.ProgressTracking.Domain.Repositories;
@@ -10,7 +10,7 @@ public class ProgressChartQueryService(
     IWeeklyAdherenceRepository adherenceRepository)
     : IProgressChartQueryService
 {
-    public async Task<ProgressChartDto?> Handle(GetProgressChartQuery query, CancellationToken cancellationToken)
+    public async Task<ProgressChartResult?> Handle(GetProgressChartQuery query, CancellationToken cancellationToken)
     {
         var weights = (await weightRepository.FindByPatientUserIdAndDateRangeAsync(
             query.PatientUserId, query.PeriodStart, query.PeriodEnd, cancellationToken))
@@ -27,6 +27,6 @@ public class ProgressChartQueryService(
         var overallChange = weights.Count >= 2 ? weights.Last().WeightKg - weights.First().WeightKg : 0m;
         var avgAdherence = adherences.Any() ? adherences.Average(a => a.AdherencePct) : 0m;
 
-        return new ProgressChartDto(query.PatientUserId, weightHistory, adherenceHistory, overallChange, null, avgAdherence);
+        return new ProgressChartResult(query.PatientUserId, weightHistory, adherenceHistory, overallChange, null, avgAdherence);
     }
 }

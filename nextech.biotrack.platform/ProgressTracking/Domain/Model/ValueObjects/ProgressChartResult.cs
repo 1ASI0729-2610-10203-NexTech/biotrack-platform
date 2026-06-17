@@ -1,6 +1,6 @@
-namespace nextech.biotrack.platform.ProgressTracking.Application.Dtos;
+namespace nextech.biotrack.platform.ProgressTracking.Domain.Model.ValueObjects;
 
-public record ProgressChartDto(
+public record ProgressChartResult(
     int PatientUserId,
     IEnumerable<WeightDataPoint> WeightHistory,
     IEnumerable<AdherenceDataPoint> AdherenceHistory,
