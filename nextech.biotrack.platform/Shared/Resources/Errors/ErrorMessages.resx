@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="GenericError" xml:space="preserve">
+        <value>An error occurred.</value>
+    </data>
+    <data name="OperationCancelled" xml:space="preserve">
+        <value>The operation was cancelled.</value>
+    </data>
+
+    <!-- IAM -->
+    <data name="IamError.UserNotFound" xml:space="preserve">
+        <value>User not found.</value>
+    </data>
+    <data name="IamError.UsernameAlreadyTaken" xml:space="preserve">
+        <value>Username {0} is already taken.</value>
+    </data>
+    <data name="IamError.InvalidCredentials" xml:space="preserve">
+        <value>Invalid username or password.</value>
+    </data>
+    <data name="IamError.OperationCancelled" xml:space="preserve">
+        <value>User operation was cancelled.</value>
+    </data>
+    <data name="IamError.DatabaseError" xml:space="preserve">
+        <value>A database error occurred during IAM operation.</value>
+    </data>
+    <data name="IamError.InternalServerError" xml:space="preserve">
+        <value>An unexpected internal error occurred in IAM.</value>
+    </data>
+
+    <!-- Patient Profile -->
+    <data name="PatientProfileError.PatientNotFound" xml:space="preserve">
+        <value>Patient not found.</value>
+    </data>
+    <data name="PatientProfileError.EmailAlreadyRegistered" xml:space="preserve">
+        <value>Email address {0} is already registered.</value>
+    </data>
+    <data name="PatientProfileError.InvalidProfileData" xml:space="preserve">
+        <value>Invalid patient profile data provided.</value>
+    </data>
+    <data name="PatientProfileError.OperationCancelled" xml:space="preserve">
+        <value>Patient profile operation was cancelled.</value>
+    </data>
+    <data name="PatientProfileError.DatabaseError" xml:space="preserve">
+        <value>A database error occurred during patient profile operation.</value>
+    </data>
+    <data name="PatientProfileError.InternalServerError" xml:space="preserve">
+        <value>An unexpected internal error occurred in Patient Profile.</value>
+    </data>
+
+    <!-- Nutritional Planning -->
+    <data name="NutritionalPlanningError.PlanNotFound" xml:space="preserve">
+        <value>Nutritional plan not found.</value>
+    </data>
+    <data name="NutritionalPlanningError.MealNotFound" xml:space="preserve">
+        <value>Meal not found.</value>
+    </data>
+    <data name="NutritionalPlanningError.InvalidPlanData" xml:space="preserve">
+        <value>Invalid nutritional plan data provided.</value>
+    </data>
+    <data name="NutritionalPlanningError.OperationCancelled" xml:space="preserve">
+        <value>Nutritional planning operation was cancelled.</value>
+    </data>
+    <data name="NutritionalPlanningError.DatabaseError" xml:space="preserve">
+        <value>A database error occurred during nutritional planning operation.</value>
+    </data>
+    <data name="NutritionalPlanningError.InternalServerError" xml:space="preserve">
+        <value>An unexpected internal error occurred in Nutritional Planning.</value>
+    </data>
+
+    <!-- Progress Tracking -->
+    <data name="ProgressTrackingError.RecordNotFound" xml:space="preserve">
+        <value>Progress record not found.</value>
+    </data>
+    <data name="ProgressTrackingError.InvalidRecordData" xml:space="preserve">
+        <value>Invalid progress record data provided.</value>
+    </data>
+    <data name="ProgressTrackingError.OperationCancelled" xml:space="preserve">
+        <value>Progress tracking operation was cancelled.</value>
+    </data>
+    <data name="ProgressTrackingError.DatabaseError" xml:space="preserve">
+        <value>A database error occurred during progress tracking operation.</value>
+    </data>
+    <data name="ProgressTrackingError.InternalServerError" xml:space="preserve">
+        <value>An unexpected internal error occurred in Progress Tracking.</value>
+    </data>
+
+    <!-- Corporate Management -->
+    <data name="CorporateManagementError.OrganizationNotFound" xml:space="preserve">
+        <value>Organization not found.</value>
+    </data>
+    <data name="CorporateManagementError.NutritionistNotFound" xml:space="preserve">
+        <value>Nutritionist not found.</value>
+    </data>
+    <data name="CorporateManagementError.InvalidData" xml:space="preserve">
+        <value>Invalid corporate management data provided.</value>
+    </data>
+    <data name="CorporateManagementError.OperationCancelled" xml:space="preserve">
+        <value>Corporate management operation was cancelled.</value>
+    </data>
+    <data name="CorporateManagementError.DatabaseError" xml:space="preserve">
+        <value>A database error occurred during corporate management operation.</value>
+    </data>
+    <data name="CorporateManagementError.InternalServerError" xml:space="preserve">
+        <value>An unexpected internal error occurred in Corporate Management.</value>
+    </data>
+
+    <!-- Subscription Billing -->
+    <data name="SubscriptionBillingError.SubscriptionNotFound" xml:space="preserve">
+        <value>Subscription not found.</value>
+    </data>
+    <data name="SubscriptionBillingError.PlanNotFound" xml:space="preserve">
+        <value>Billing plan not found.</value>
+    </data>
+    <data name="SubscriptionBillingError.PaymentFailed" xml:space="preserve">
+        <value>Payment processing failed.</value>
+    </data>
+    <data name="SubscriptionBillingError.AlreadySubscribed" xml:space="preserve">
+        <value>User is already subscribed to this plan.</value>
+    </data>
+    <data name="SubscriptionBillingError.OperationCancelled" xml:space="preserve">
+        <value>Subscription billing operation was cancelled.</value>
+    </data>
+    <data name="SubscriptionBillingError.DatabaseError" xml:space="preserve">
+        <value>A database error occurred during subscription billing operation.</value>
+    </data>
+    <data name="SubscriptionBillingError.InternalServerError" xml:space="preserve">
+        <value>An unexpected internal error occurred in Subscription Billing.</value>
+    </data>
+</root>
