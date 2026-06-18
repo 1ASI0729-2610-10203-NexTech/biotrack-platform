@@ -10,12 +10,12 @@
     <ItemGroup>
         <!-- EntityFrameworkCore Database Persistence related packages -->
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2" />
         <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.9.0" />
         <!-- MySQL Database Persistence related packages -->
-        <PackageReference Include="MySql.EntityFrameworkCore" Version="9.0.0" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
         <!-- Naming convention conversion related packages -->
         <PackageReference Include="Humanizer" Version="2.14.1" />
         <!-- OpenAPI documentation related packages -->
