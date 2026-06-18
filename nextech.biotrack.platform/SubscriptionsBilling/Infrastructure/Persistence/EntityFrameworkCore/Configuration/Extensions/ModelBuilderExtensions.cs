@@ -18,7 +18,7 @@ public static class ModelBuilderExtensions
 
         builder.Entity<Subscription>().HasKey(s => s.Id);
         builder.Entity<Subscription>().Property(s => s.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<Subscription>().Property(s => s.UserId).IsRequired();
+        builder.Entity<Subscription>().Property(s => s.UserId).IsRequired().HasConversion<int>();
         builder.Entity<Subscription>().Property(s => s.PlanId).IsRequired();
         builder.Entity<Subscription>().Property(s => s.Status).IsRequired().HasMaxLength(50);
         builder.Entity<Subscription>().Property(s => s.StartDate).IsRequired();
@@ -27,7 +27,7 @@ public static class ModelBuilderExtensions
 
         builder.Entity<CorporateSubscription>().HasKey(c => c.Id);
         builder.Entity<CorporateSubscription>().Property(c => c.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<CorporateSubscription>().Property(c => c.OrganizationUserId).IsRequired();
+        builder.Entity<CorporateSubscription>().Property(c => c.OrganizationUserId).IsRequired().HasConversion<int>();
         builder.Entity<CorporateSubscription>().Property(c => c.PlanId).IsRequired();
         builder.Entity<CorporateSubscription>().Property(c => c.OrganizationName).IsRequired().HasMaxLength(200);
         builder.Entity<CorporateSubscription>().Property(c => c.Status).IsRequired().HasMaxLength(50);
@@ -38,7 +38,7 @@ public static class ModelBuilderExtensions
 
         builder.Entity<Payment>().HasKey(p => p.Id);
         builder.Entity<Payment>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<Payment>().Property(p => p.SubscriptionId).IsRequired();
+        builder.Entity<Payment>().Property(p => p.SubscriptionId).IsRequired().HasConversion<int>();
         builder.Entity<Payment>().Property(p => p.PaymentDate).IsRequired();
         builder.Entity<Payment>().Property(p => p.Amount).IsRequired().HasPrecision(10, 2);
         builder.Entity<Payment>().Property(p => p.Status).IsRequired().HasMaxLength(50);
@@ -47,7 +47,7 @@ public static class ModelBuilderExtensions
 
         builder.Entity<Invoice>().HasKey(i => i.Id);
         builder.Entity<Invoice>().Property(i => i.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<Invoice>().Property(i => i.SubscriptionId).IsRequired();
+        builder.Entity<Invoice>().Property(i => i.SubscriptionId).IsRequired().HasConversion<int>();
         builder.Entity<Invoice>().Property(i => i.IssuedDate).IsRequired();
         builder.Entity<Invoice>().Property(i => i.DueDate).IsRequired();
         builder.Entity<Invoice>().Property(i => i.Amount).IsRequired().HasPrecision(10, 2);
@@ -55,7 +55,7 @@ public static class ModelBuilderExtensions
 
         builder.Entity<LatePaymentNotice>().HasKey(n => n.Id);
         builder.Entity<LatePaymentNotice>().Property(n => n.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<LatePaymentNotice>().Property(n => n.SubscriptionId).IsRequired();
+        builder.Entity<LatePaymentNotice>().Property(n => n.SubscriptionId).IsRequired().HasConversion<int>();
         builder.Entity<LatePaymentNotice>().Property(n => n.NoticeDate).IsRequired();
         builder.Entity<LatePaymentNotice>().Property(n => n.FailedAttempts).IsRequired();
         builder.Entity<LatePaymentNotice>().Property(n => n.Status).IsRequired().HasMaxLength(50);

@@ -12,7 +12,7 @@ using nextech.biotrack.platform.Shared.Infrastructure.Persistence.EntityFramewor
 namespace nextech.biotrack.platform.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260618221109_InitialCreate")]
+    [Migration("20260618222126_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
