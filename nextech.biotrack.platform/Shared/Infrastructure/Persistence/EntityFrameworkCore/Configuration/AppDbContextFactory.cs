@@ -8,7 +8,8 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     public AppDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseMySQL("Server=localhost;Database=biotrack_dev;User=root;Password=root;");
+        var connectionString = "server=localhost;port=3306;database=biotrack_platform;user=root;password=#Mysql123;";
+        optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         return new AppDbContext(optionsBuilder.Options);
     }
 }
