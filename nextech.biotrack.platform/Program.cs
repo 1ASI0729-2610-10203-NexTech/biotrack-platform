@@ -155,8 +155,39 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();
+    try
+    {
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        context.Database.EnsureCreated();
+
+        if (!context.Set<nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.Entities.SubscriptionPlan>().Any())
+        {
+            context.Set<nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.Entities.SubscriptionPlan>().AddRange(
+                new nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.Entities.SubscriptionPlan(
+                    "Basic Individual",
+                    nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.ValueObjects.PlanType.Individual,
+                    nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.ValueObjects.BillingCycle.Monthly, 9.99m),
+                new nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.Entities.SubscriptionPlan(
+                    "Premium Individual",
+                    nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.ValueObjects.PlanType.Individual,
+                    nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.ValueObjects.BillingCycle.Monthly, 19.99m),
+                new nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.Entities.SubscriptionPlan(
+                    "Corporate Plan",
+                    nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.ValueObjects.PlanType.Corporate,
+                    nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.ValueObjects.BillingCycle.Monthly, 49.99m),
+                new nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.Entities.SubscriptionPlan(
+                    "Free Trial",
+                    nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.ValueObjects.PlanType.Trial,
+                    nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.ValueObjects.BillingCycle.Monthly, 0m)
+            );
+            context.SaveChanges();
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogWarning("Could not connect to database on startup: {Message}", ex.Message);
+    }
 }
 
 app.UseGlobalExceptionHandler();
