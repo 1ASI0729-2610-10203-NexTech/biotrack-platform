@@ -10,11 +10,10 @@ public class RequestAuthorizationMiddleware(RequestDelegate next)
     public async Task InvokeAsync(
         HttpContext context,
         IUserQueryService userQueryService,
-        ITokenService tokenService,
-        CancellationToken cancellationToken)
+        ITokenService tokenService)
     {
-        var allowAnonymous = context.Request.HttpContext.GetEndpoint()!
-            .Metadata.Any(m => m.GetType() == typeof(AllowAnonymousAttribute));
+        var endpoint = context.GetEndpoint();
+        var allowAnonymous = endpoint?.Metadata.Any(m => m.GetType() == typeof(AllowAnonymousAttribute)) ?? true;
 
         if (allowAnonymous)
         {
@@ -30,7 +29,8 @@ public class RequestAuthorizationMiddleware(RequestDelegate next)
         var userId = await tokenService.ValidateToken(token);
         if (userId == null) throw new Exception("Invalid token.");
 
-        var user = await userQueryService.Handle(new GetUserByIdQuery(userId.Value), cancellationToken);
+        var ct = context.RequestAborted;
+        var user = await userQueryService.Handle(new GetUserByIdQuery(userId.Value), ct);
         context.Items["User"] = user;
 
         await next(context);

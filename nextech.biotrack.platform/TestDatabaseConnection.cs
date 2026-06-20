@@ -4,7 +4,7 @@ using nextech.biotrack.platform.Shared.Infrastructure.Persistence.EntityFramewor
 namespace nextech.biotrack.platform.Tests;
 
 /// <summary>
-/// Clase de prueba para verificar la conexión a la base de datos MySQL
+/// Clase de prueba para verificar la conexión a la base de datos PostgreSQL
 ///
 /// Uso: dotnet run --project . -- --test-db
 /// O ejecutar desde Program.cs durante startup
@@ -20,7 +20,7 @@ public class TestDatabaseConnection
         try
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+                .UseNpgsql(connectionString)
                 .EnableDetailedErrors()
                 .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information)
                 .Options;
@@ -75,22 +75,22 @@ public class TestDatabaseConnection
             Console.WriteLine("========================================\n");
 
             Console.WriteLine("Posibles causas:");
-            Console.WriteLine("1. MySQL no está ejecutándose en la VM");
-            Console.WriteLine("2. El firewall bloquea la conexión (puerto 3306)");
+            Console.WriteLine("1. PostgreSQL no está ejecutándose en la VM");
+            Console.WriteLine("2. El firewall bloquea la conexión (puerto 5432)");
             Console.WriteLine("3. Las credenciales son incorrectas");
             Console.WriteLine("4. La dirección IP es incorrecta (68.155.147.143)\n");
 
             Console.WriteLine("Soluciones:");
-            Console.WriteLine("1. Verificar que MySQL está corriendo en la VM:");
+            Console.WriteLine("1. Verificar que PostgreSQL está corriendo en la VM:");
             Console.WriteLine("   ssh azureuser@68.155.147.143");
-            Console.WriteLine("   sudo systemctl status mysql\n");
+            Console.WriteLine("   sudo systemctl status postgresql\n");
 
-            Console.WriteLine("2. Verificar credenciales MySQL:");
-            Console.WriteLine("   sudo mysql -u root -p");
-            Console.WriteLine("   SHOW GRANTS FOR 'biotrack_user'@'%';\n");
+            Console.WriteLine("2. Verificar credenciales PostgreSQL:");
+            Console.WriteLine("   sudo -u postgres psql");
+            Console.WriteLine("   \\du biotrack_user\n");
 
             Console.WriteLine("3. Revisar la connection string en appsettings.Development.json");
-            Console.WriteLine("   Debe ser: Server=68.155.147.143;Port=3306;Database=biotrack_db;User=biotrack_user;Password=BioTrack123*;\n");
+            Console.WriteLine("   Debe ser: Host=68.155.147.143;Port=5432;Database=biotrack_platform;Username=biotrack_user;Password=Deikogamer138;\n");
 
             throw;
         }

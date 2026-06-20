@@ -42,6 +42,7 @@ using nextech.biotrack.platform.Shared.Infrastructure.Interfaces.AspNetCore.Conf
 using nextech.biotrack.platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
 using nextech.biotrack.platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using nextech.biotrack.platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using nextech.biotrack.platform.Iam.Infrastructure.Pipeline.Middleware.Extensions;
 using nextech.biotrack.platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
 using nextech.biotrack.platform.SubscriptionsBilling.Application.CommandServices;
 using nextech.biotrack.platform.SubscriptionsBilling.Application.Internal.CommandServices;
@@ -70,7 +71,7 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
     if (string.IsNullOrWhiteSpace(connectionString))
         throw new InvalidOperationException("Database connection string is not set in the configuration.");
 
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+    options.UseNpgsql(connectionString)
         .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
         .EnableDetailedErrors();
 
@@ -168,6 +169,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAllPolicy");
 app.UseHttpsRedirection();
+app.UseRequestAuthorization();
 app.UseAuthorization();
 app.MapControllers();
 
