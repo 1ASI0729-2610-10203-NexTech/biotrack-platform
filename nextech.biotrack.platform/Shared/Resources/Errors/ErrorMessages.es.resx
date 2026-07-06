@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="GenericError" xml:space="preserve">
+        <value>Ocurrió un error.</value>
+    </data>
+    <data name="OperationCancelled" xml:space="preserve">
+        <value>La operación fue cancelada.</value>
+    </data>
+
+    <!-- IAM -->
+    <data name="IamError.UserNotFound" xml:space="preserve">
+        <value>Usuario no encontrado.</value>
+    </data>
+    <data name="IamError.UsernameAlreadyTaken" xml:space="preserve">
+        <value>El nombre de usuario {0} ya está en uso.</value>
+    </data>
+    <data name="IamError.InvalidCredentials" xml:space="preserve">
+        <value>Nombre de usuario o contraseña inválidos.</value>
+    </data>
+    <data name="IamError.OperationCancelled" xml:space="preserve">
+        <value>La operación de usuario fue cancelada.</value>
+    </data>
+    <data name="IamError.DatabaseError" xml:space="preserve">
+        <value>Ocurrió un error de base de datos durante la operación IAM.</value>
+    </data>
+    <data name="IamError.InternalServerError" xml:space="preserve">
+        <value>Ocurrió un error interno inesperado en IAM.</value>
+    </data>
+
+    <!-- Patient Profile -->
+    <data name="PatientProfileError.PatientNotFound" xml:space="preserve">
+        <value>Paciente no encontrado.</value>
+    </data>
+    <data name="PatientProfileError.EmailAlreadyRegistered" xml:space="preserve">
+        <value>La dirección de correo electrónico {0} ya está registrada.</value>
+    </data>
+    <data name="PatientProfileError.InvalidProfileData" xml:space="preserve">
+        <value>Datos de perfil de paciente inválidos.</value>
+    </data>
+    <data name="PatientProfileError.OperationCancelled" xml:space="preserve">
+        <value>La operación de perfil de paciente fue cancelada.</value>
+    </data>
+    <data name="PatientProfileError.DatabaseError" xml:space="preserve">
+        <value>Ocurrió un error de base de datos durante la operación de perfil de paciente.</value>
+    </data>
+    <data name="PatientProfileError.InternalServerError" xml:space="preserve">
+        <value>Ocurrió un error interno inesperado en Perfil de Paciente.</value>
+    </data>
+
+    <!-- Nutritional Planning -->
+    <data name="NutritionalPlanningError.PlanNotFound" xml:space="preserve">
+        <value>Plan nutricional no encontrado.</value>
+    </data>
+    <data name="NutritionalPlanningError.MealNotFound" xml:space="preserve">
+        <value>Comida no encontrada.</value>
+    </data>
+    <data name="NutritionalPlanningError.InvalidPlanData" xml:space="preserve">
+        <value>Datos de plan nutricional inválidos.</value>
+    </data>
+    <data name="NutritionalPlanningError.OperationCancelled" xml:space="preserve">
+        <value>La operación de planificación nutricional fue cancelada.</value>
+    </data>
+    <data name="NutritionalPlanningError.DatabaseError" xml:space="preserve">
+        <value>Ocurrió un error de base de datos durante la operación de planificación nutricional.</value>
+    </data>
+    <data name="NutritionalPlanningError.InternalServerError" xml:space="preserve">
+        <value>Ocurrió un error interno inesperado en Planificación Nutricional.</value>
+    </data>
+
+    <!-- Progress Tracking -->
+    <data name="ProgressTrackingError.RecordNotFound" xml:space="preserve">
+        <value>Registro de progreso no encontrado.</value>
+    </data>
+    <data name="ProgressTrackingError.InvalidRecordData" xml:space="preserve">
+        <value>Datos de registro de progreso inválidos.</value>
+    </data>
+    <data name="ProgressTrackingError.OperationCancelled" xml:space="preserve">
+        <value>La operación de seguimiento de progreso fue cancelada.</value>
+    </data>
+    <data name="ProgressTrackingError.DatabaseError" xml:space="preserve">
+        <value>Ocurrió un error de base de datos durante la operación de seguimiento de progreso.</value>
+    </data>
+    <data name="ProgressTrackingError.InternalServerError" xml:space="preserve">
+        <value>Ocurrió un error interno inesperado en Seguimiento de Progreso.</value>
+    </data>
+
+    <!-- Corporate Management -->
+    <data name="CorporateManagementError.OrganizationNotFound" xml:space="preserve">
+        <value>Organización no encontrada.</value>
+    </data>
+    <data name="CorporateManagementError.NutritionistNotFound" xml:space="preserve">
+        <value>Nutricionista no encontrado.</value>
+    </data>
+    <data name="CorporateManagementError.InvalidData" xml:space="preserve">
+        <value>Datos de gestión corporativa inválidos.</value>
+    </data>
+    <data name="CorporateManagementError.OperationCancelled" xml:space="preserve">
+        <value>La operación de gestión corporativa fue cancelada.</value>
+    </data>
+    <data name="CorporateManagementError.DatabaseError" xml:space="preserve">
+        <value>Ocurrió un error de base de datos durante la operación de gestión corporativa.</value>
+    </data>
+    <data name="CorporateManagementError.InternalServerError" xml:space="preserve">
+        <value>Ocurrió un error interno inesperado en Gestión Corporativa.</value>
+    </data>
+
+    <!-- Subscription Billing -->
+    <data name="SubscriptionBillingError.SubscriptionNotFound" xml:space="preserve">
+        <value>Suscripción no encontrada.</value>
+    </data>
+    <data name="SubscriptionBillingError.PlanNotFound" xml:space="preserve">
+        <value>Plan de facturación no encontrado.</value>
+    </data>
+    <data name="SubscriptionBillingError.PaymentFailed" xml:space="preserve">
+        <value>El procesamiento del pago falló.</value>
+    </data>
+    <data name="SubscriptionBillingError.AlreadySubscribed" xml:space="preserve">
+        <value>El usuario ya está suscrito a este plan.</value>
+    </data>
+    <data name="SubscriptionBillingError.OperationCancelled" xml:space="preserve">
+        <value>La operación de facturación fue cancelada.</value>
+    </data>
+    <data name="SubscriptionBillingError.DatabaseError" xml:space="preserve">
+        <value>Ocurrió un error de base de datos durante la operación de facturación.</value>
+    </data>
+    <data name="SubscriptionBillingError.InternalServerError" xml:space="preserve">
+        <value>Ocurrió un error interno inesperado en Facturación de Suscripción.</value>
+    </data>
+</root>
