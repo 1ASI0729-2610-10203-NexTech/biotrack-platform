@@ -17,9 +17,9 @@ namespace nextech.biotrack.platform.Iam.Interfaces.Rest;
 public class AuthController(IUserCommandService userCommandService) : ControllerBase
 {
     /// <summary>Login with email and password (TS02)</summary>
-    [HttpPost("login")]
+    [HttpPost("tokens")]
     [AllowAnonymous]
-    [SwaggerOperation(Summary = "Login", OperationId = "Login")]
+    [SwaggerOperation(Summary = "Create auth token", OperationId = "CreateAuthToken")]
     [SwaggerResponse(StatusCodes.Status200OK, "Authenticated successfully", typeof(AuthenticatedUserResource))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid credentials")]
     public async Task<IActionResult> Login(
@@ -35,16 +35,16 @@ public class AuthController(IUserCommandService userCommandService) : Controller
     }
 
     /// <summary>Verify email address with token (TS03)</summary>
-    [HttpGet("verify-email")]
+    [HttpPost("email-verifications")]
     [AllowAnonymous]
-    [SwaggerOperation(Summary = "Verify email", OperationId = "VerifyEmail")]
+    [SwaggerOperation(Summary = "Create email verification", OperationId = "CreateEmailVerification")]
     [SwaggerResponse(StatusCodes.Status200OK, "Email verified successfully")]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid or already used token")]
     public async Task<IActionResult> VerifyEmail(
-        [FromQuery] string token,
+        [FromBody] VerifyEmailResource resource,
         CancellationToken cancellationToken)
     {
-        var command = new VerifyEmailCommand(token);
+        var command = new VerifyEmailCommand(resource.Token);
         var result = await userCommandService.Handle(command, cancellationToken);
         return IamActionResultAssembler.ToActionResult(
             this, result,

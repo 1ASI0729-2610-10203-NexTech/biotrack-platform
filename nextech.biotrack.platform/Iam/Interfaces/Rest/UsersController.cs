@@ -20,7 +20,7 @@ public class UsersController(
     IUserQueryService userQueryService) : ControllerBase
 {
     /// <summary>Register a new user (TS01)</summary>
-    [HttpPost("register")]
+    [HttpPost]
     [AllowAnonymous]
     [SwaggerOperation(Summary = "Register user", OperationId = "RegisterUser")]
     [SwaggerResponse(StatusCodes.Status201Created, "User registered successfully")]
