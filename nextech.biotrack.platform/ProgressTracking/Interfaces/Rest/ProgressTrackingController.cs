@@ -46,9 +46,9 @@ public class ProgressTrackingController(
     }
 
     /// <summary>Log food intake (TS32)</summary>
-    [HttpPost("food-log")]
-    [SwaggerOperation(Summary = "Log food intake", OperationId = "LogFood")]
-    [SwaggerResponse(StatusCodes.Status201Created, "Food logged", typeof(FoodEntryResource))]
+    [HttpPost("food-entries")]
+    [SwaggerOperation(Summary = "Create food entry", OperationId = "CreateFoodEntry")]
+    [SwaggerResponse(StatusCodes.Status201Created, "Food entry created", typeof(FoodEntryResource))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid data")]
     public async Task<IActionResult> LogFood(
         [FromBody] LogFoodResource resource,
@@ -64,9 +64,9 @@ public class ProgressTrackingController(
     }
 
     /// <summary>Log physical activity (TS33)</summary>
-    [HttpPost("activity-log")]
-    [SwaggerOperation(Summary = "Log activity", OperationId = "LogActivity")]
-    [SwaggerResponse(StatusCodes.Status201Created, "Activity logged", typeof(ActivityEntryResource))]
+    [HttpPost("activity-entries")]
+    [SwaggerOperation(Summary = "Create activity entry", OperationId = "CreateActivityEntry")]
+    [SwaggerResponse(StatusCodes.Status201Created, "Activity entry created", typeof(ActivityEntryResource))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid data")]
     public async Task<IActionResult> LogActivity(
         [FromBody] LogActivityResource resource,
@@ -82,8 +82,8 @@ public class ProgressTrackingController(
     }
 
     /// <summary>Record current weight (TS34)</summary>
-    [HttpPost("weight-update")]
-    [SwaggerOperation(Summary = "Record weight update", OperationId = "RecordWeight")]
+    [HttpPost("weight-records")]
+    [SwaggerOperation(Summary = "Record weight", OperationId = "RecordWeight")]
     [SwaggerResponse(StatusCodes.Status201Created, "Weight recorded", typeof(WeightRecordResource))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid data")]
     public async Task<IActionResult> RecordWeight(
