@@ -20,16 +20,16 @@ public class SubscriptionsController(
     IReactivateSubscriptionCommandService reactivateCommandService)
     : ControllerBase
 {
-    /// <summary>Activate a new subscription for the authenticated user</summary>
-    [HttpPost("activate")]
+    /// <summary>Create and activate a new subscription for the authenticated user</summary>
+    [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
-    [SwaggerOperation(Summary = "Activate subscription", OperationId = "ActivateSubscription")]
-    [SwaggerResponse(StatusCodes.Status200OK, "Subscription activated successfully", typeof(SubscriptionResource))]
+    [SwaggerOperation(Summary = "Create subscription", OperationId = "CreateSubscription")]
+    [SwaggerResponse(StatusCodes.Status201Created, "Subscription created successfully", typeof(SubscriptionResource))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request data")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Missing or invalid token")]
     [SwaggerResponse(StatusCodes.Status402PaymentRequired, "Payment was rejected")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Subscription plan not found")]
-    public async Task<IActionResult> ActivateSubscription(
+    public async Task<IActionResult> CreateSubscription(
         [FromBody] ActivateSubscriptionResource resource,
         CancellationToken cancellationToken)
     {
@@ -37,43 +37,47 @@ public class SubscriptionsController(
         var command = ActivateSubscriptionCommandFromResourceAssembler.ToCommandFromResource(currentUser.Id, resource);
         var result = await activateCommandService.Handle(command, cancellationToken);
         return SubscriptionsBillingActionResultAssembler.ToActionResult(this, result,
-            subscription => Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription)));
+            subscription => StatusCode(StatusCodes.Status201Created,
+                SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription)));
     }
 
-    /// <summary>Suspend a subscription</summary>
-    [HttpPatch("{subscriptionId:int}/suspend")]
-    [SwaggerOperation(Summary = "Suspend subscription", OperationId = "SuspendSubscription")]
-    [SwaggerResponse(StatusCodes.Status200OK, "Subscription suspended successfully", typeof(SubscriptionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
+    /// <summary>Update subscription status (Suspended or Active)</summary>
+    [HttpPatch("{subscriptionId:int}")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [SwaggerOperation(Summary = "Update subscription status", OperationId = "UpdateSubscriptionStatus")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Subscription updated successfully", typeof(SubscriptionResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid status. Use 'Suspended' or 'Active'")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Missing or invalid token")]
+    [SwaggerResponse(StatusCodes.Status402PaymentRequired, "Payment was rejected")]
     [SwaggerResponse(StatusCodes.Status403Forbidden, "Access denied")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Subscription not found")]
-    public async Task<IActionResult> SuspendSubscription(
+    public async Task<IActionResult> UpdateSubscriptionStatus(
         int subscriptionId,
+        [FromBody] UpdateSubscriptionStatusResource resource,
         CancellationToken cancellationToken)
     {
         var currentUser = (User)HttpContext.Items["User"]!;
-        var command = SuspendSubscriptionCommandFromResourceAssembler.ToCommandFromResource(subscriptionId, currentUser.Id);
-        var result = await suspendCommandService.Handle(command, cancellationToken);
+
+        return resource.Status switch
+        {
+            "Suspended" => await HandleSuspend(subscriptionId, currentUser.Id, cancellationToken),
+            "Active" => await HandleReactivate(subscriptionId, currentUser.Id, cancellationToken),
+            _ => BadRequest(new { message = $"Invalid status '{resource.Status}'. Use 'Suspended' or 'Active'." })
+        };
+    }
+
+    private async Task<IActionResult> HandleSuspend(int subscriptionId, int userId, CancellationToken ct)
+    {
+        var command = SuspendSubscriptionCommandFromResourceAssembler.ToCommandFromResource(subscriptionId, userId);
+        var result = await suspendCommandService.Handle(command, ct);
         return SubscriptionsBillingActionResultAssembler.ToActionResult(this, result,
             subscription => Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription)));
     }
 
-    /// <summary>Reactivate a suspended or pending subscription</summary>
-    [HttpPatch("{subscriptionId:int}/reactivate")]
-    [SwaggerOperation(Summary = "Reactivate subscription", OperationId = "ReactivateSubscription")]
-    [SwaggerResponse(StatusCodes.Status200OK, "Subscription reactivated successfully", typeof(SubscriptionResource))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, "Subscription not eligible for reactivation")]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Missing or invalid token")]
-    [SwaggerResponse(StatusCodes.Status402PaymentRequired, "Payment was rejected")]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "Subscription not found")]
-    public async Task<IActionResult> ReactivateSubscription(
-        int subscriptionId,
-        CancellationToken cancellationToken)
+    private async Task<IActionResult> HandleReactivate(int subscriptionId, int userId, CancellationToken ct)
     {
-        var currentUser = (User)HttpContext.Items["User"]!;
-        var command = ReactivateSubscriptionCommandFromResourceAssembler.ToCommandFromResource(subscriptionId, currentUser.Id);
-        var result = await reactivateCommandService.Handle(command, cancellationToken);
+        var command = ReactivateSubscriptionCommandFromResourceAssembler.ToCommandFromResource(subscriptionId, userId);
+        var result = await reactivateCommandService.Handle(command, ct);
         return SubscriptionsBillingActionResultAssembler.ToActionResult(this, result,
             subscription => Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(subscription)));
     }
