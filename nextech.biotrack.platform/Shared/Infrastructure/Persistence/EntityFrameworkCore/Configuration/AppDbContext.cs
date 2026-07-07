@@ -21,12 +21,12 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        builder.UseSnakeCaseNamingConvention();
         builder.ApplyIamConfiguration();
         builder.ApplyCorporateManagementConfiguration();
         builder.ApplyNutritionalPlanningConfiguration();
         builder.ApplyPatientProfileConfiguration();
         builder.ApplyProgressTrackingConfiguration();
         builder.ApplySubscriptionsBillingConfiguration();
+        builder.UseSnakeCaseNamingConvention();
     }
 }
