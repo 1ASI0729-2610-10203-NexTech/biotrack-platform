@@ -5,4 +5,5 @@ public record CreateNutritionalPlanResource(
     int CalorieTarget,
     int ProteinGrams,
     int CarbsGrams,
-    int FatGrams);
+    int FatGrams,
+    int? PatientId = null);

@@ -22,7 +22,7 @@ public class NutritionalPlanCommandService(
             return Result<NutritionalPlan>.Failure(NutritionalPlanningError.InvalidCalorieTarget, "Calorie target must be greater than zero.");
 
         var plan = new NutritionalPlan(command.Name, command.CalorieTarget, command.ProteinGrams,
-            command.CarbsGrams, command.FatGrams, command.NutritionistId);
+            command.CarbsGrams, command.FatGrams, command.NutritionistId, command.PatientId);
 
         try
         {

@@ -6,4 +6,5 @@ public record CreateNutritionalPlanCommand(
     int ProteinGrams,
     int CarbsGrams,
     int FatGrams,
-    int NutritionistId);
+    int NutritionistId,
+    int? PatientId = null);

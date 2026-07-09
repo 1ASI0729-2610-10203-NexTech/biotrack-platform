@@ -4,7 +4,7 @@ public class NutritionalPlan
 {
     public NutritionalPlan() : this(string.Empty, 0, 0, 0, 0, 0) { }
 
-    public NutritionalPlan(string name, int calorieTarget, int proteinGrams, int carbsGrams, int fatGrams, int nutritionistId)
+    public NutritionalPlan(string name, int calorieTarget, int proteinGrams, int carbsGrams, int fatGrams, int nutritionistId, int? patientId = null)
     {
         Name = name;
         CalorieTarget = calorieTarget;
@@ -12,6 +12,7 @@ public class NutritionalPlan
         CarbsGrams = carbsGrams;
         FatGrams = fatGrams;
         NutritionistId = nutritionistId;
+        PatientId = patientId;
         Status = "Proposed";
     }
 
@@ -22,6 +23,7 @@ public class NutritionalPlan
     public int CarbsGrams { get; private set; }
     public int FatGrams { get; private set; }
     public int NutritionistId { get; private set; }
+    public int? PatientId { get; private set; }
     public string Status { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }

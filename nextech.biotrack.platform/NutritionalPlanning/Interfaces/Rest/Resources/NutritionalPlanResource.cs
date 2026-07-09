@@ -9,5 +9,6 @@ public record NutritionalPlanResource(
     int FatGrams,
     string Status,
     int NutritionistId,
+    int? PatientId,
     DateTime CreatedAt,
     DateTime UpdatedAt);

@@ -1,6 +1,8 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
+using nextech.biotrack.platform.Iam.Application.QueryServices;
 using nextech.biotrack.platform.Iam.Domain.Model.Aggregates;
+using nextech.biotrack.platform.Iam.Domain.Model.Queries;
 using nextech.biotrack.platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using nextech.biotrack.platform.NutritionalPlanning.Application.CommandServices;
 using nextech.biotrack.platform.NutritionalPlanning.Application.QueryServices;
@@ -18,7 +20,8 @@ namespace nextech.biotrack.platform.NutritionalPlanning.Interfaces.Rest;
 [SwaggerTag("Nutritional Planning endpoints")]
 public class NutritionalPlansController(
     INutritionalPlanCommandService commandService,
-    INutritionalPlanQueryService queryService) : ControllerBase
+    INutritionalPlanQueryService queryService,
+    IUserQueryService userQueryService) : ControllerBase
 {
     /// <summary>Get nutritional plans for the authenticated nutritionist (TS21)</summary>
     [HttpGet]
@@ -76,5 +79,41 @@ public class NutritionalPlansController(
         };
 
         return Ok(new { planId = plan.Id, planName = plan.Name, calorieTarget = plan.CalorieTarget, days = weeklyDiet });
+    }
+
+    /// <summary>Get all patients with plans assigned by the current nutritionist</summary>
+    [HttpGet("my-patients")]
+    [SwaggerOperation(Summary = "Get patients by nutritionist", OperationId = "GetMyPatients")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Patients returned")]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
+    public async Task<IActionResult> GetMyPatients(CancellationToken cancellationToken)
+    {
+        var currentUser = (User)HttpContext.Items["User"]!;
+        var plans = await queryService.Handle(new GetNutritionalPlansByNutritionistIdQuery(currentUser.Id), cancellationToken);
+
+        var patientIds = plans
+            .Where(p => p.PatientId.HasValue)
+            .Select(p => p.PatientId!.Value)
+            .Distinct()
+            .ToList();
+
+        var patients = new List<object>();
+        foreach (var patientId in patientIds)
+        {
+            var user = await userQueryService.Handle(new GetUserByIdQuery(patientId), cancellationToken);
+            if (user is null) continue;
+            var latestPlan = plans.Where(p => p.PatientId == patientId).OrderByDescending(p => p.CreatedAt).FirstOrDefault();
+            patients.Add(new
+            {
+                id = user.Id,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                email = user.Email,
+                role = user.Role.ToString(),
+                plan = latestPlan is null ? null : NutritionalPlanResourceFromEntityAssembler.ToResourceFromEntity(latestPlan)
+            });
+        }
+
+        return Ok(new { nutritionist = new { id = currentUser.Id, firstName = currentUser.FirstName, lastName = currentUser.LastName }, patients });
     }
 }

@@ -15,6 +15,7 @@ public static class ModelBuilderExtensions
         builder.Entity<NutritionalPlan>().Property(p => p.CarbsGrams).IsRequired();
         builder.Entity<NutritionalPlan>().Property(p => p.FatGrams).IsRequired();
         builder.Entity<NutritionalPlan>().Property(p => p.NutritionistId).IsRequired();
+        builder.Entity<NutritionalPlan>().Property(p => p.PatientId).IsRequired(false);
         builder.Entity<NutritionalPlan>().Property(p => p.Status).IsRequired().HasMaxLength(20);
         builder.Entity<NutritionalPlan>().Property(p => p.CreatedAt).IsRequired();
         builder.Entity<NutritionalPlan>().Property(p => p.UpdatedAt).IsRequired();

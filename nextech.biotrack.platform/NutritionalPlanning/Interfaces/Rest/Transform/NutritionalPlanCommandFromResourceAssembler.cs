@@ -7,5 +7,5 @@ public static class NutritionalPlanCommandFromResourceAssembler
 {
     public static CreateNutritionalPlanCommand ToCommandFromResource(CreateNutritionalPlanResource resource, int nutritionistId) =>
         new(resource.Name, resource.CalorieTarget, resource.ProteinGrams,
-            resource.CarbsGrams, resource.FatGrams, nutritionistId);
+            resource.CarbsGrams, resource.FatGrams, nutritionistId, resource.PatientId);
 }
