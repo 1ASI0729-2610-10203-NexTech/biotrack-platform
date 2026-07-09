@@ -19,12 +19,14 @@ public class UserCommandService(
 {
     public async Task<Result> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        if (await userRepository.ExistsByEmailAsync(command.Email, cancellationToken))
+        var normalizedEmail = command.Email.Trim().ToLowerInvariant();
+
+        if (await userRepository.ExistsByEmailAsync(normalizedEmail, cancellationToken))
             return Result.Failure(IamError.EmailAlreadyTaken,
-                $"The email '{command.Email}' is already registered.");
+                $"The email '{normalizedEmail}' is already registered.");
 
         var hashedPassword = hashingService.HashPassword(command.Password);
-        var user = new User(command.FirstName, command.LastName, command.Email, hashedPassword, command.Role);
+        var user = new User(command.FirstName, command.LastName, normalizedEmail, hashedPassword, command.Role);
 
         try
         {
@@ -48,7 +50,7 @@ public class UserCommandService(
 
     public async Task<Result<(User user, string token)>> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        var user = await userRepository.FindByEmailAsync(command.Email, cancellationToken);
+        var user = await userRepository.FindByEmailAsync(command.Email.Trim().ToLowerInvariant(), cancellationToken);
 
         if (user == null || !hashingService.VerifyPassword(command.Password, user.PasswordHash))
             return Result<(User user, string token)>.Failure(
