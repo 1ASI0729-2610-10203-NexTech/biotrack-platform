@@ -166,6 +166,13 @@ using (var scope = app.Services.CreateScope())
         context.Database.EnsureCreated();
         context.Database.ExecuteSqlRaw(
             "ALTER TABLE IF EXISTS \"NutritionalPlans\" ADD COLUMN IF NOT EXISTS \"PatientId\" INTEGER NULL;");
+        context.Database.ExecuteSqlRaw(@"
+            ALTER TABLE IF EXISTS ""HealthProfiles"" ADD COLUMN IF NOT EXISTS ""Age"" INTEGER NULL;
+            ALTER TABLE IF EXISTS ""HealthProfiles"" ADD COLUMN IF NOT EXISTS ""BiologicalSex"" TEXT NULL;
+            ALTER TABLE IF EXISTS ""HealthProfiles"" ADD COLUMN IF NOT EXISTS ""SystolicPressure"" INTEGER NULL;
+            ALTER TABLE IF EXISTS ""HealthProfiles"" ADD COLUMN IF NOT EXISTS ""DiastolicPressure"" INTEGER NULL;
+            ALTER TABLE IF EXISTS ""HealthProfiles"" ADD COLUMN IF NOT EXISTS ""GlucoseMgDl"" NUMERIC NULL;
+        ");
 
         if (!context.Set<nextech.biotrack.platform.SubscriptionsBilling.Domain.Model.Entities.SubscriptionPlan>().Any())
         {

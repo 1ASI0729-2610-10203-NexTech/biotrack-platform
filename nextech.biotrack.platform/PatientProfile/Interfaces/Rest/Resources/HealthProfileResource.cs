@@ -10,6 +10,11 @@ public record HealthProfileResource(
     string ActivityLevel,
     string NutritionalObjective,
     string DietaryRestrictions,
+    int? Age,
+    string? BiologicalSex,
+    int? SystolicPressure,
+    int? DiastolicPressure,
+    decimal? GlucoseMgDl,
     DateTime UpdatedAt);
 
 public record UpdateHealthDataResource(
@@ -17,6 +22,11 @@ public record UpdateHealthDataResource(
     decimal WeightKg,
     decimal GoalWeightKg,
     string ActivityLevel,
-    string NutritionalObjective);
+    string NutritionalObjective,
+    int? Age = null,
+    string? BiologicalSex = null,
+    int? SystolicPressure = null,
+    int? DiastolicPressure = null,
+    decimal? GlucoseMgDl = null);
 
 public record UpdateDietaryRestrictionsResource(string Restrictions);

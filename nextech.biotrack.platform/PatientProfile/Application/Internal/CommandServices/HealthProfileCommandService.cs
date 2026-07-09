@@ -23,7 +23,9 @@ public class HealthProfileCommandService(
         if (profile == null)
         {
             profile = new HealthProfile(command.UserId, command.HeightCm, command.WeightKg,
-                command.GoalWeightKg, command.ActivityLevel, command.NutritionalObjective, string.Empty);
+                command.GoalWeightKg, command.ActivityLevel, command.NutritionalObjective, string.Empty,
+                command.Age, command.BiologicalSex,
+                command.SystolicPressure, command.DiastolicPressure, command.GlucoseMgDl);
             try
             {
                 await profileRepository.AddAsync(profile, cancellationToken);
@@ -37,7 +39,9 @@ public class HealthProfileCommandService(
         }
 
         profile.UpdateHealthData(command.HeightCm, command.WeightKg, command.GoalWeightKg,
-            command.ActivityLevel, command.NutritionalObjective);
+            command.ActivityLevel, command.NutritionalObjective,
+            command.Age, command.BiologicalSex,
+            command.SystolicPressure, command.DiastolicPressure, command.GlucoseMgDl);
         profileRepository.Update(profile);
 
         try

@@ -8,5 +8,8 @@ public static class HealthProfileResourceFromEntityAssembler
     public static HealthProfileResource ToResourceFromEntity(HealthProfile profile) =>
         new(profile.Id, profile.UserId, profile.HeightCm, profile.WeightKg,
             profile.GoalWeightKg, profile.Bmi, profile.ActivityLevel,
-            profile.NutritionalObjective, profile.DietaryRestrictions, profile.UpdatedAt);
+            profile.NutritionalObjective, profile.DietaryRestrictions,
+            profile.Age, profile.BiologicalSex,
+            profile.SystolicPressure, profile.DiastolicPressure, profile.GlucoseMgDl,
+            profile.UpdatedAt);
 }

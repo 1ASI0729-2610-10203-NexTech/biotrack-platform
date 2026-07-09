@@ -5,7 +5,9 @@ public class HealthProfile
     public HealthProfile() : this(0, 0m, 0m, 0m, string.Empty, string.Empty, string.Empty) { }
 
     public HealthProfile(int userId, decimal heightCm, decimal weightKg, decimal goalWeightKg,
-        string activityLevel, string nutritionalObjective, string dietaryRestrictions)
+        string activityLevel, string nutritionalObjective, string dietaryRestrictions,
+        int? age = null, string? biologicalSex = null,
+        int? systolicPressure = null, int? diastolicPressure = null, decimal? glucoseMgDl = null)
     {
         UserId = userId;
         HeightCm = heightCm;
@@ -14,6 +16,11 @@ public class HealthProfile
         ActivityLevel = activityLevel;
         NutritionalObjective = nutritionalObjective;
         DietaryRestrictions = dietaryRestrictions;
+        Age = age;
+        BiologicalSex = biologicalSex;
+        SystolicPressure = systolicPressure;
+        DiastolicPressure = diastolicPressure;
+        GlucoseMgDl = glucoseMgDl;
     }
 
     public int Id { get; }
@@ -24,6 +31,11 @@ public class HealthProfile
     public string ActivityLevel { get; private set; }
     public string NutritionalObjective { get; private set; }
     public string DietaryRestrictions { get; private set; }
+    public int? Age { get; private set; }
+    public string? BiologicalSex { get; private set; }
+    public int? SystolicPressure { get; private set; }
+    public int? DiastolicPressure { get; private set; }
+    public decimal? GlucoseMgDl { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
@@ -48,13 +60,20 @@ public class HealthProfile
     public int FatTarget() => (int)(CalorieTarget() * 0.25m / 9);
 
     public void UpdateHealthData(decimal heightCm, decimal weightKg, decimal goalWeightKg,
-        string activityLevel, string nutritionalObjective)
+        string activityLevel, string nutritionalObjective,
+        int? age = null, string? biologicalSex = null,
+        int? systolicPressure = null, int? diastolicPressure = null, decimal? glucoseMgDl = null)
     {
         HeightCm = heightCm;
         WeightKg = weightKg;
         GoalWeightKg = goalWeightKg;
         ActivityLevel = activityLevel;
         NutritionalObjective = nutritionalObjective;
+        Age = age;
+        BiologicalSex = biologicalSex;
+        SystolicPressure = systolicPressure;
+        DiastolicPressure = diastolicPressure;
+        GlucoseMgDl = glucoseMgDl;
     }
 
     public void UpdateDietaryRestrictions(string restrictions) => DietaryRestrictions = restrictions;

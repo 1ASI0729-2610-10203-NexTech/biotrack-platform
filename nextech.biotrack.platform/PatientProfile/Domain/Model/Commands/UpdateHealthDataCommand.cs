@@ -6,6 +6,11 @@ public record UpdateHealthDataCommand(
     decimal WeightKg,
     decimal GoalWeightKg,
     string ActivityLevel,
-    string NutritionalObjective);
+    string NutritionalObjective,
+    int? Age = null,
+    string? BiologicalSex = null,
+    int? SystolicPressure = null,
+    int? DiastolicPressure = null,
+    decimal? GlucoseMgDl = null);
 
 public record UpdateDietaryRestrictionsCommand(int UserId, string Restrictions);

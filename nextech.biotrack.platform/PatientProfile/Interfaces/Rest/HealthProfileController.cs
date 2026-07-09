@@ -51,7 +51,9 @@ public class HealthProfileController(
     {
         var currentUser = (User)HttpContext.Items["User"]!;
         var command = new UpdateHealthDataCommand(currentUser.Id, resource.HeightCm, resource.WeightKg,
-            resource.GoalWeightKg, resource.ActivityLevel, resource.NutritionalObjective);
+            resource.GoalWeightKg, resource.ActivityLevel, resource.NutritionalObjective,
+            resource.Age, resource.BiologicalSex,
+            resource.SystolicPressure, resource.DiastolicPressure, resource.GlucoseMgDl);
         var result = await commandService.Handle(command, cancellationToken);
         return PatientProfileActionResultAssembler.ToActionResult(
             this, result,
